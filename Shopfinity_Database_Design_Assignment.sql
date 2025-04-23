@@ -6,8 +6,8 @@ CREATE TABLE `brand` (
   `founded_year` year,
   `headquarters` varchar(100),
   `is_active` boolean DEFAULT true,
-  `created_at` timestamp DEFAULT (now()),
-  `updated_at` timestamp DEFAULT (now())
+`created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `product_category` (
@@ -17,8 +17,8 @@ CREATE TABLE `product_category` (
   `category_description` text,
   `category_image_url` varchar(255),
   `is_active` boolean DEFAULT true,
-  `created_at` timestamp DEFAULT (now()),
-  `updated_at` timestamp DEFAULT (now())
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `product` (
@@ -33,8 +33,8 @@ CREATE TABLE `product` (
   `is_active` boolean DEFAULT true,
   `avg_rating` decimal(3,2) DEFAULT 0,
   `total_reviews` int DEFAULT 0,
-  `created_at` timestamp DEFAULT (now()),
-  `updated_at` timestamp DEFAULT (now())
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `size_category` (
@@ -62,7 +62,7 @@ CREATE TABLE `product_variation` (
   `variation_id` int PRIMARY KEY AUTO_INCREMENT,
   `product_id` int NOT NULL,
   `variation_name` varchar(100) NOT NULL,
-  `variation_type` enum(size,color,style,material,other) NOT NULL,
+  `variation_type` enum('size','color','style','material','other') NOT NULL,
   `is_required` boolean DEFAULT true,
   `display_order` int DEFAULT 0
 );
@@ -88,8 +88,8 @@ CREATE TABLE `product_item` (
   `width` decimal(8,2) COMMENT 'in cm',
   `height` decimal(8,2) COMMENT 'in cm',
   `is_active` boolean DEFAULT true,
-  `created_at` timestamp DEFAULT (now()),
-  `updated_at` timestamp DEFAULT (now())
+`created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `product_item_variation` (
@@ -128,7 +128,7 @@ CREATE TABLE `attribute_category` (
 CREATE TABLE `attribute_type` (
   `attribute_type_id` int PRIMARY KEY AUTO_INCREMENT,
   `type_name` varchar(50) UNIQUE NOT NULL,
-  `input_type` enum(text,number,boolean,select,multiselect,date) NOT NULL,
+  `input_type` enum('text','number','boolean','select','multiselect','date') NOT NULL,
   `validation_regex` varchar(255)
 );
 
@@ -161,7 +161,7 @@ CREATE TABLE `attribute_option` (
 
 CREATE UNIQUE INDEX `product_category_index_0` ON `product_category` (`category_name`, `parent_category_id`);
 
-CREATE INDEX `product_index_1` ON `product` (`product_name`, `product_description`) USING FULLTEXT;
+CREATE FULLTEXT INDEX `product_index_1` ON `product` (`product_description`);
 
 CREATE UNIQUE INDEX `size_option_index_2` ON `size_option` (`size_category_id`, `size_value`);
 
